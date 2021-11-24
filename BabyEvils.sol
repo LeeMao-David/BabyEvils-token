@@ -6,7 +6,7 @@
 * 10% fee ( 4% burned , 2% marketing account , 4% liquidity pool)
 *  
 *
-* last submitted : 2021 / 11 / 24 UTC+8  5:11
+* last submitted : 2021 / 11 / 24 UTC+8  18:11
 */
 
 
@@ -364,7 +364,7 @@ contract BabyEvils is Context, IERC20, Ownable {
     
 
     address public uniswapPair;
-    address payable public buringAddress    = payable(0x0000000000000000000000000000000000000001);
+    address payable public burningAddress    = payable(0x0000000000000000000000000000000000000001);
     address payable public marketingAddress = payable(0x97796a367ab3e417320b2E4c46B3d4080368AbDa);
     address payable public ownerAddress     = payable(0x9eb6040c7542F1E535F31259F8b8a7c555F48CDA);
     address payable public liquidityAddress = payable(0x537d80E6AA9FD208C00aF3bC4172cFeC08621Ac4);
@@ -408,7 +408,7 @@ contract BabyEvils is Context, IERC20, Ownable {
             _transfer(_msgSender(), recipient, amount);
         }else{
             _transfer(_msgSender(), recipient, amount.div(100).mul(100 - transactionFee()));
-            _transfer(_msgSender(), address(buringAddress) ,amount.div(100).mul(buringRate));
+            _transfer(_msgSender(), address(burningAddress) ,amount.div(100).mul(buringRate));
             _transfer(_msgSender(), address(marketingAddress) ,amount.div(100).mul(marketingRate));
             _transfer(_msgSender(), address(ownerAddress) ,amount.div(100).mul(ownerRate));
             _transfer(_msgSender(), address(liquidityAddress) ,amount.div(100).mul(liquidityRate));
@@ -461,7 +461,7 @@ contract BabyEvils is Context, IERC20, Ownable {
             _transfer(sender, recipient, amount);
         }else{
             _transfer(sender, recipient, amount.div(100).mul(100 - transactionFee()));
-            _transfer(sender, address(buringAddress) ,amount.div(100).mul(buringRate));
+            _transfer(sender, address(burningAddress) ,amount.div(100).mul(buringRate));
             _transfer(sender, address(marketingAddress) ,amount.div(100).mul(marketingRate));
             _transfer(sender, address(ownerAddress) ,amount.div(100).mul(ownerRate));
             _transfer(sender, address(liquidityAddress) ,amount.div(100).mul(liquidityRate));
