@@ -420,6 +420,12 @@ contract BabyEvils is Context, IERC20, Ownable {
     function transactionFee () public view returns (uint256){
         return buringRate+marketingRate+ownerRate+liquidityRate;
     }
+
+    function burnSomeToken(uint256 _amount) external onlyOwner() {
+        require(_amount >= 0 , "Amount should more than zero");
+        require(_amount < _showTotal , "Amount shouldn't be more than supply");
+        _showTotal -= _amount;
+    }
     
     function setBurnRate(uint256 _amount) external onlyOwner() {
         require(_amount >= 1 , "Rate should more than zero");
