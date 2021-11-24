@@ -357,9 +357,9 @@ contract BabyEvils is Context, IERC20, Ownable {
     uint8 private _decimals = 0;
     uint8 public transfertimeout = 15;
     
-    uint256 public buringRate    = 3;
+    uint256 public buringRate    = 4;
     uint256 public marketingRate = 1;
-    uint256 public ownerRate     = 2;
+    uint256 public ownerRate     = 1;
     uint256 public liquidityRate = 4;
     
 
