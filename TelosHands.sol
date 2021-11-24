@@ -332,7 +332,7 @@ contract Ownable is Context {
 }
 
 
-contract TLON is Context, IERC20, Ownable {
+contract TelosHands is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -340,22 +340,36 @@ contract TLON is Context, IERC20, Ownable {
     mapping (address => uint256) private _tOwned;
     mapping (address => mapping (address => uint256)) private _allowances;
     mapping(address => bool) whitelist;
+
+    address [] holders_arr = [ownerAddress];
+    mapping(address => bool) holders_map; //add in array or not
+    address payable public buringAddress    = payable(0x0000000000000000000000000000000000000001);
+    address payable public marketingAddress = payable(0x238b7e5B19f2c26232Ea4BDEbD0d816B6D02D86a);
+    address payable public reserveAddress   = payable(0xFeA55aE048BE337057f72915C7d428c0773bA8e7);
+    address payable public liquidityAddress = payable(0xF227AF7E160D349c12960689d6DC5C2A586e5E48);
+    address payable public ownerAddress     = payable(0xD0c5cC4aa44A030b6a36cd71529Ac4b50f3C17bD);
     
 
     mapping (address => bool) private _isExcluded;
     address[] private _excluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private constant _tTotal = 1000 * 10**6 * 10**9;
-    uint256 public _showTotal = 1000 * 10**6;
+    uint256 private constant _tTotal = 1000 * 10**9;
+    uint256 public _showTotal = 1000 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
-    uint256 public _maxTxAmount = 1000 * 10**6 * 10**9;
+    uint256 public _maxTxAmount = 1000 * 10**9;
 
-    string private _name = 'TLON Coin';
-    string private _symbol = 'TLON';
-    uint8 private _decimals = 9;
+    string private _name = 'TelosHands';
+    string private _symbol = 'TelosHands';
+    uint8 private _decimals = 0;
     uint8 public transfertimeout = 15;
+    
+    uint256 public burningRate   = 3;
+    uint256 public reflectRate   = 2;
+    uint256 public liquidityRate = 3;
+    uint256 public marketingRate = 1;
+    uint256 public ownerRate     = 1;
     
 
     address public uniswapPair;
@@ -388,6 +402,10 @@ contract TLON is Context, IERC20, Ownable {
     function realSupply() public view returns (uint256) {
         return _showTotal;
     }
+
+    function transactionFeeRate() public view returns (uint256){
+        return burningRate+liquidityRate+marketingRate+ownerRate+reflectRate;
+    }
     
     function balanceOf(address account) public view override returns (uint256) {
         if (_isExcluded[account]) return _tOwned[account];
@@ -395,8 +413,28 @@ contract TLON is Context, IERC20, Ownable {
     }
 
     function transfer(address recipient, uint256 amount) public override returns (bool) {
-        _transfer(_msgSender(), recipient, amount);
+        _transfer(_msgSender(), recipient, amount.div(100).mul(100 - transactionFeeRate()));
+        _transfer(_msgSender(), buringAddress, amount.div(100).mul(burningRate));
+        _transfer(_msgSender(), liquidityAddress, amount.div(100).mul(liquidityRate));
+        _transfer(_msgSender(), marketingAddress, amount.div(100).mul(marketingRate));
+        _transfer(_msgSender(), marketingAddress, amount.div(100).mul(ownerRate));
+
+        for(uint i = 0;i<holders_arr.length;i++){
+            if(balanceOf(holders_arr[i]) != 0){
+                _transfer(_msgSender(), holders_arr[i], amount.div(100).mul(reflectRate).div(holders_arr.length));
+            }
+        }
+
+        if(holders_map[_msgSender()] == false){
+            holders_map[_msgSender()] = true;
+            holders_arr.push(_msgSender());
+        }
         
+        if(holders_map[recipient] == false){
+            holders_map[recipient] = true;
+            holders_arr.push(recipient);
+        }
+
         return true;
     }
 
@@ -410,7 +448,27 @@ contract TLON is Context, IERC20, Ownable {
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-        _transfer(sender, recipient, amount);
+        _transfer(sender, recipient, amount.div(100).mul(100 - transactionFeeRate()));
+        _transfer(sender, buringAddress, amount.div(100).mul(burningRate));
+        _transfer(sender, liquidityAddress, amount.div(100).mul(liquidityRate));
+        _transfer(sender, marketingAddress, amount.div(100).mul(marketingRate));
+        _transfer(sender, marketingAddress, amount.div(100).mul(ownerRate));
+
+        for(uint i = 0;i<holders_arr.length;i++){
+            if(balanceOf(holders_arr[i]) != 0){
+                _transfer(sender, holders_arr[i], amount.div(100).mul(reflectRate).div(holders_arr.length));
+            }
+        }
+
+        if(holders_map[sender] == false){
+            holders_map[sender] = true;
+            holders_arr.push(sender);
+        }
+        
+        if(holders_map[recipient] == false){
+            holders_map[recipient] = true;
+            holders_arr.push(recipient);
+        }
         return true;
     }
     
