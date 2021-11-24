@@ -1,1 +1,1 @@
-# TLON-token
+# TelosHand-token
