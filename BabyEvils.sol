@@ -346,11 +346,11 @@ contract BabyEvils is Context, IERC20, Ownable {
     address[] private _excluded;
    
     uint256 private constant MAX = ~uint256(0);
-    uint256 private constant _tTotal = 1000 * 10**9;
-    uint256 public _showTotal = 1000 * 10**9;
+    uint256 private constant _tTotal = 1000 * 10**8;
+    uint256 public _showTotal = 1000 * 10**8;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
-    uint256 public _maxTxAmount = 1000 * 10**9;
+    uint256 public _maxTxAmount = 1000 * 10**8;
 
     string private _name = 'BabyEvils';
     string private _symbol = 'BabyEvils';
@@ -365,9 +365,9 @@ contract BabyEvils is Context, IERC20, Ownable {
 
     address public uniswapPair;
     address payable public buringAddress    = payable(0x0000000000000000000000000000000000000001);
-    address payable public marketingAddress = payable(0x238b7e5B19f2c26232Ea4BDEbD0d816B6D02D86a);
-    address payable public reserveAddress   = payable(0xFeA55aE048BE337057f72915C7d428c0773bA8e7);
-    address payable public liquidityAddress = payable(0xF227AF7E160D349c12960689d6DC5C2A586e5E48);
+    address payable public marketingAddress = payable(0x97796a367ab3e417320b2E4c46B3d4080368AbDa);
+    address payable public ownerAddress   = payable(0x9eb6040c7542F1E535F31259F8b8a7c555F48CDA);
+    address payable public liquidityAddress = payable(0x537d80E6AA9FD208C00aF3bC4172cFeC08621Ac4);
     mapping (address => uint256) public lastBuy;
     
     event AddedToWhitelist(address indexed account);
@@ -410,7 +410,7 @@ contract BabyEvils is Context, IERC20, Ownable {
             _transfer(_msgSender(), recipient, amount.div(100).mul(100 - transactionFee()));
             _transfer(_msgSender(), address(buringAddress) ,amount.div(100).mul(buringRate));
             _transfer(_msgSender(), address(marketingAddress) ,amount.div(100).mul(marketingRate));
-            _transfer(_msgSender(), address(reserveAddress) ,amount.div(100).mul(ownerRate));
+            _transfer(_msgSender(), address(ownerAddress) ,amount.div(100).mul(ownerRate));
             _transfer(_msgSender(), address(liquidityAddress) ,amount.div(100).mul(liquidityRate));
             _showTotal = _showTotal - amount.div(100).mul(buringRate);
         }
@@ -422,22 +422,22 @@ contract BabyEvils is Context, IERC20, Ownable {
     }
     
     function setBurnRate(uint256 _amount) external onlyOwner() {
-        require(_amount >= 0 , "Rate should more than zero");
+        require(_amount >= 1 , "Rate should more than zero");
         buringRate = _amount;
     }
     
     function setMarketingRate(uint256 _amount) external onlyOwner() {
-        require(_amount >= 0 , "Rate should more than zero");
+        require(_amount >= 1 , "Rate should more than zero");
         marketingRate = _amount;
     }
     
-    function setReserverate(uint256 _amount) external onlyOwner() {
-        require(_amount >= 0 , "Rate should more than zero");
+    function setOwnerrate(uint256 _amount) external onlyOwner() {
+        require(_amount >= 1 , "Rate should more than zero");
         ownerRate = _amount;
     }
     
     function setLiquidityrate(uint256 _amount) external onlyOwner() {
-        require(_amount >= 0 , "Rate should more than zero");
+        require(_amount >= 1 , "Rate should more than zero");
         liquidityRate = _amount;
     }
 
@@ -457,7 +457,7 @@ contract BabyEvils is Context, IERC20, Ownable {
             _transfer(sender, recipient, amount.div(100).mul(100 - transactionFee()));
             _transfer(sender, address(buringAddress) ,amount.div(100).mul(buringRate));
             _transfer(sender, address(marketingAddress) ,amount.div(100).mul(marketingRate));
-            _transfer(sender, address(reserveAddress) ,amount.div(100).mul(ownerRate));
+            _transfer(sender, address(ownerAddress) ,amount.div(100).mul(ownerRate));
             _transfer(sender, address(liquidityAddress) ,amount.div(100).mul(liquidityRate));
             _showTotal = _showTotal - amount.div(100).mul(buringRate);
         }
