@@ -359,14 +359,14 @@ contract BabyEvils is Context, IERC20, Ownable {
     
     uint256 public buringRate    = 3;
     uint256 public marketingRate = 1;
-    uint256 public ownerRate   = 2;
+    uint256 public ownerRate     = 2;
     uint256 public liquidityRate = 4;
     
 
     address public uniswapPair;
     address payable public buringAddress    = payable(0x0000000000000000000000000000000000000001);
     address payable public marketingAddress = payable(0x97796a367ab3e417320b2E4c46B3d4080368AbDa);
-    address payable public ownerAddress   = payable(0x9eb6040c7542F1E535F31259F8b8a7c555F48CDA);
+    address payable public ownerAddress     = payable(0x9eb6040c7542F1E535F31259F8b8a7c555F48CDA);
     address payable public liquidityAddress = payable(0x537d80E6AA9FD208C00aF3bC4172cFeC08621Ac4);
     mapping (address => uint256) public lastBuy;
     
