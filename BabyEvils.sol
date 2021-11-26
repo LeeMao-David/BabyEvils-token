@@ -6,6 +6,7 @@
 * 10% fee ( 4% burned , 2% marketing account , 4% liquidity pool)
 *  
 *
+* 0x4EBeD425e637acf55c28e3D2631E4f9A80c448bC
 * last submitted : 2021 / 11 / 24   UTC+8  18:11
 */
 
